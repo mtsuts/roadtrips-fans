@@ -15,17 +15,17 @@ class MercatorMap {
 				colors: {
 					layers: ['#589A2E'],
 					strokeColor: '#ffffff',
-					fillColor: '#F09060',
+					fillColor: '#49D69D',
 				},
 				featureStrokeWidth: 0,
 				basemap: {},
 				layer: [],
 				zoomExtent: [1, 8],
 				objectsField: 'collection',
-				onZoom: () => {},
-				beforeRender: () => {},
-				getTooltipHtml: () => {},
-				onPinClick: () => {},
+				onZoom: () => { },
+				beforeRender: () => { },
+				getTooltipHtml: () => { },
+				onPinClick: () => { },
 			},
 			params
 		)
@@ -41,9 +41,9 @@ class MercatorMap {
 		this.geoFeatures =
 			attrs.basemap.type === 'Topology'
 				? topojson.feature(
-						attrs.basemap,
-						attrs.basemap.objects[attrs.objectsField]
-				  )
+					attrs.basemap,
+					attrs.basemap.objects[attrs.objectsField]
+				)
 				: attrs.basemap
 
 		this.setDimensions()
@@ -107,7 +107,7 @@ class MercatorMap {
 
 				attrs.onZoom(e.transform)
 			})
-			.on('end', () => {})
+			.on('end', () => { })
 
 		this.zoom = zoom
 		this.svg.call(zoom).on('dblclick.zoom', null).on('wheel.zoom', null)
@@ -137,8 +137,8 @@ class MercatorMap {
 		return `
       <g transform="translate(-13, -40) scale(0.8)" transform-origin="13 40">
         <g class="pin-content" transform-origin="13 40" transform="scale(${1 / this.currentTransform.k})">
-          <path d="M18.5173 25.7125L13.3717 40.8706L8.22614 25.7125C4.97537 24.3565 2.39047 21.7714 1.03444 18.5208C-1.8089 11.703 1.41073 3.87461 8.22386 1.03316C15.0394 -1.80795 22.8678 1.41168 25.7092 8.22485C28.5525 15.0403 25.3305 22.8687 18.5173 25.7125Z" fill="#C51A35"/>
-          <text class="rank-text" x="13" y="17" text-anchor="middle">${d.rank}</text>
+          <path d="M18.5173 25.7125L13.3717 40.8706L8.22614 25.7125C4.97537 24.3565 2.39047 21.7714 1.03444 18.5208C-1.8089 11.703 1.41073 3.87461 8.22386 1.03316C15.0394 -1.80795 22.8678 1.41168 25.7092 8.22485C28.5525 15.0403 25.3305 22.8687 18.5173 25.7125Z" fill="#101921"/>
+          <text class="rank-text" x="13" y="17" text-anchor="middle">${d.Rank}</text>
         </g>
       </g>
     `
@@ -161,20 +161,20 @@ class MercatorMap {
 				tag: 'g',
 				selector: 'pin',
 				data: layer.map(d => {
-          const [x, y] = this.projection([d.Longitude, d.Latitude])
-          return {
-            ...d,
-            x,
-            y
-          }
-        }),
+					const [x, y] = this.projection([d.Longitude, d.Latitude])
+					return {
+						...d,
+						x,
+						y
+					}
+				}),
 			})
 			.classed('highlighted', d => d.highlighted)
 			.attr('transform', d => {
 				return `translate(${d.x},${d.y})`
 			})
 			.sort((a, b) => {
-			  return a.y - b.y;
+				return a.y - b.y;
 			})
 			.html(d => this.getPin(d))
 			.on('mouseover click', function (e, d) {
@@ -215,7 +215,7 @@ class MercatorMap {
 		// 		})
 		// }
 
-		this.pinsDom.each(function(d) {
+		this.pinsDom.each(function (d) {
 			initTooltip(this, getTooltipHtml(d))
 		})
 
@@ -270,10 +270,10 @@ class MercatorMap {
 							Math.min(
 								this.attrs.zoomExtent[1],
 								0.5 /
-									Math.max(
-										(x1 - x0) / this.chartWidth,
-										(y1 - y0) / this.chartHeight
-									)
+								Math.max(
+									(x1 - x0) / this.chartWidth,
+									(y1 - y0) / this.chartHeight
+								)
 							)
 						)
 						.translate(-(x0 + x1) / 2, -(y0 + y1) / 2)
@@ -290,7 +290,7 @@ class MercatorMap {
 			this.attrs.width = containerRect.width
 		}
 
-    this.attrs.height = this.attrs.width < 576 ? 517 : 745
+		this.attrs.height = this.attrs.width < 576 ? 517 : 745
 
 		this.chartWidth =
 			this.attrs.width - this.attrs.margin.right - this.attrs.margin.left
@@ -307,7 +307,7 @@ class MercatorMap {
 	highlightPin(highlight) {
 		this.pinsDom.classed('highlighted', d => {
 			return d.highlighted = highlight(d)
-		}).each(function(d) {
+		}).each(function (d) {
 			if (d.highlighted) {
 				if (this._tippy) {
 					this._tippy.show()

@@ -20,27 +20,27 @@ class App {
 		try {
 			const [mapjson, data] = await Promise.all([
 				d3.json('./data/uk-outline-topo.json'),
-				d3.csv('./data/data.csv', d3.autoType),
+				d3.csv('./data/football-data.csv', d3.autoType),
 			])
 
 			this.data = data
 
 			this.choice = initDropdown({
-				placeholder: 'Find your Town / city',
+				placeholder: 'FIND YOUR CLUB',
 				list: data
 					.slice()
 					.sort((a, b) => {
-						return d3.ascending(a.Name, b.Name)
+						return d3.ascending(a.Team, b.Team)
 					})
 					.map(d => {
 						return {
-							label: d.Name,
-							value: d.Name,
+							label: d.Team,
+							value: d.Team,
 						}
 					}),
 				id: '#city_select',
-				cb: name => {
-					this.map.highlightPin(x => x.Name === name)
+				cb: team => {
+					this.map.highlightPin(x => x.Team === team)
 				},
 				searchEnabled: true,
 			})
@@ -62,39 +62,43 @@ class App {
 				getTooltipHtml: d => {
 					return `
 					<div class="tooltip-div">
-						<h3 class="tooltip-title">${d.Name}</h3>
+						<h3 class="tooltip-title">${d.Team}</h3>
 
 						<div>
+						<div class='FC-rank'> 
+            <div> Rank </div>
+						</div>
 
 							<table class="table table-sm">
 								<thead>
 									<tr>
 										<th>Factors</th>
-										<th></th>
 										<th>Rank</th>
+										<th> <th>
 									</tr>
 								</thead>
 								<tbody>
 									${Object.values(config)
-										.sort((a, b) => a.order - b.order)
-										.map(conf => {
-											return `
+							.sort((a, b) => a.order - b.order)
+							.map(conf => {
+								console.log(conf)
+								return `
 												<tr>
 													<td>
 														<div class="d-flex align-items-center">
 															<div class="icon">${conf.icon}</div>
-															<div class="field-name">${conf.label}</div>
+															<div class="field-Team">${conf.label}</div>
 														</div>
 													</td>
 													<td class="col-2">
-														${conf.format ? conf.format(d[conf.fieldName] || '') : d[conf.fieldName] || ''}
+														${conf.format ? conf.format(d[conf.fieldTeam] || '') : d[conf.fieldTeam] || ''}
 													</td>
 													<td class="col-3">
 														${ordinal_suffix_of(d[conf.rankField])}
 													</td>
 												</tr>
 											`
-										}).join('')}
+							}).join('')}
 								</tbody>
 							</table>
 						
@@ -132,8 +136,8 @@ class App {
 						})
 				},
 				onPinClick: d => {
-					this.choice.setChoiceByValue(d.Name)
-					this.map.highlightPin(x => x.Name === d.Name)
+					this.choice.setChoiceByValue(d.Team)
+					this.map.highlightPin(x => x.Team === d.Team)
 				},
 			})
 
@@ -204,37 +208,40 @@ class App {
 				<thead>
 					<tr>
 						<th>Rank</th>
-						${conf.fieldName ? `<th>${conf.label}</th>` : ''} 
-						<th>Town / City</th>
+						<th>Club</th>
+				${conf.fieldTeam ? `<th>${conf.label}</th>` : ''}
 					</tr>
 				</thead>
 				<tbody>
 					${this.data
-						.slice()
-						.sort((a, b) => {
-							return a[conf.rankField] - b[conf.rankField]
-						})
-						.map(d => {
-							return `
+					.slice()
+					.sort((a, b) => {
+						return a[conf.rankField] - b[conf.rankField]
+					})
+					.map(d => {
+						return `
 								<tr>
 									<td>${ordinal_suffix_of(d[conf.rankField])}</td>
 
-									${conf.fieldName ? `<td>${d[conf.fieldName]}</td>` : ''} 
+				
 
-									<td>${d.Name}</td>
+									<td>${d.Team}</td>
+									${conf.fieldTeam ? `<td>${d[conf.fieldTeam]}</td>` : ''} 
 								</tr>
 							`
-						})
-						.join('')}
+					})
+					.join('')}
 				</tbody>
 			`)
 		}
 
-		fill(config.easy)
+		fill(config.miles)
 
 		d3.selectAll('.rank-btn').on('click', (e, d) => {
+			console.log(config)
 			const target = e.target.getAttribute('data-target')
 			d3.selectAll('.rank-btn').classed('btn-active', false)
+			d3.select('.table-desc-heading').text(config[target].tableText)
 			d3.select(e.target).classed('btn-active', true)
 			fill(config[target])
 		})

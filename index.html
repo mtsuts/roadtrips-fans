@@ -17,34 +17,31 @@
 <body>
   <div class="container main-container" id="root">
     <div class="banner">
-
-      <div class="logo">
-        <img src="./images/logo.png" />
-      </div>
-
       <div class="title d-mobile">
         <h2 class="main-title">
-          Easiest and toughest places to run in the UK
+          Football fan road trips
         </h2>
       </div>
-
-      <div class="hero-image d-desktop">
-        <img src="./images/hero-image.svg" />
-      </div>
-
-      <div class="hero-image d-mobile">
-        <img src="./images/hero-image-mobile.svg" />
+      <div class="title d-mobile">
+        <p class="small-title">
+          Explore UK football fans' away game travels. Tap numbers to see the top 50 rankings & costs.
+        </p>
       </div>
 
       <div class="title d-desktop">
         <h2 class="main-title">
-          Easiest and toughest places to run in the UK
+          Football fan road trips
         </h2>
       </div>
+      <div class="title d-desktop">
+        <p class="small-title">
+          Explore UK football fans' away game travels. Tap numbers to see the top 50 rankings & costs.
+        </p>
+      </div>
+
 
       <div class="dropdown">
         <select id="city_select">
-
         </select>
       </div>
 
@@ -89,28 +86,32 @@
           </svg>
         </button>
 
-        <div>
-          <img src="./images/mountain.svg" />
-        </div>
-        <div>
+        <div class="modal-heading">
           <h5 class="modal-title">
             Rank per factor
           </h5>
+          <div>
+            <button class="btn btn-round rank-btn btn-active" data-target="overall">Overall</button>
+            <button class="btn btn-round rank-btn" data-target="miles">Total distance</button>
+            <button class="btn btn-round rank-btn" data-target="fuel_cost">Fuel cost</button>
+            <button class="btn btn-round rank-btn" data-target="parking_cost">Parking cost</button>
+            <button class="btn btn-round rank-btn" data-target="parking_space">Parking spaces</button>
+          </div>
         </div>
 
-        <div>
-          <button class="btn btn-round rank-btn btn-active" data-target="easy">Easiest overall</button>
-          <button class="btn btn-round rank-btn" data-target="hard">Hardest overall</button>
-          <button class="btn btn-round rank-btn" data-target="vertical_rise">Vertical rise</button>
-          <button class="btn btn-round rank-btn" data-target="paths">Paths</button>
-          <button class="btn btn-round rank-btn" data-target="rainy_days">Rainy days</button>
-          <button class="btn btn-round rank-btn" data-target="wind">Wind</button>
+        <div class="modal-table">
+          <div class="table-desc">
+
+            <div class="table-desc-heading"></div>
+            <div> How far fans travel to away games to support their teams</div>
+          </div>
         </div>
 
-        <div class="table-wrap mt-2">
-          <table class="table " id="table">
+        <div class="table-wrap">
+          <table class="table" id="table">
 
           </table>
+
         </div>
       </div>
     </div>

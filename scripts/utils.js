@@ -15,7 +15,7 @@ const config = {
 	</svg>`,
 		rankField: 'Rank',
 		fieldTeam: 'Travel distance',
-		format: v => v + 'm',
+		format: v => v + 'mi',
 		label: 'Miles',
 		tableText: 'OVERALL'
 	},
@@ -28,7 +28,7 @@ const config = {
 	</svg>`,
 		rankField: 'Rank',
 		fieldTeam: 'Travel distance',
-		format: v => v + 'm',
+		format: v => v + 'mi',
 		label: 'Miles',
 		tableText: 'TOTAL DISTANCE'
 	},
@@ -51,6 +51,7 @@ const config = {
 		rankField: 'Rank parking cost',
 		label: 'Parking costs',
 		fieldTeam: 'Parking costs',
+		format: v => v + 'p/h',
 		tableText: 'PARKING COSTS'
 	},
 
@@ -64,7 +65,6 @@ const config = {
 </svg>`,
 		rankField: 'Rank parking space',
 		label: 'Parking spaces',
-		format: v => v + 'kts',
 		fieldTeam: 'Parking spaces',
 		tableText: 'PARKING SPACES'
 	},

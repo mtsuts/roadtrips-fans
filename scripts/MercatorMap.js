@@ -64,6 +64,7 @@ class MercatorMap {
 			})
 			.attr('width', attrs.width)
 			.attr('height', attrs.height)
+			.on('click', () => this.highlightPin(() => false))
 
 		//Add chart group
 		this.chart = this.svg
@@ -220,6 +221,8 @@ class MercatorMap {
 		})
 
 		this.pinsDom.on('click', function (e, d) {
+			e.preventDefault()
+			e.stopPropagation()
 			onPinClick(d)
 		})
 	}
@@ -290,7 +293,7 @@ class MercatorMap {
 			this.attrs.width = containerRect.width
 		}
 
-		this.attrs.height = this.attrs.width < 576 ? 517 : 745
+		this.attrs.height = this.attrs.width < 576 ? window.innerHeight - 250 : 745
 
 		this.chartWidth =
 			this.attrs.width - this.attrs.margin.right - this.attrs.margin.left

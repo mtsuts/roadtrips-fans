@@ -25,19 +25,33 @@ class App {
 
 			this.data = data
 
-			this.choice = initDropdown({
-				placeholder: 'FIND YOUR CLUB',
-				list: data
-					.slice()
+			const sortObj = [
+				"Premier League",
+				"Championship",
+				"League One",
+				"League Two"
+			]
+			const listOptions = d3.rollups(
+				data,
+				arr => arr
 					.sort((a, b) => {
 						return d3.ascending(a.Team, b.Team)
 					})
-					.map(d => {
-						return {
-							label: d.Team,
-							value: d.Team,
-						}
-					}),
+					.map(d => ({
+						label: d.Team,
+						value: d.Team,
+					})),
+				d => d.League
+			).map((d, i) => ({
+				label: d[0],
+				id: i + 1,
+				choices: d[1]
+			})).sort((a, b) => sortObj.indexOf(a.label) - sortObj.indexOf(b.label))
+
+			this.choice = initDropdown({
+				searchPlaceholderValue: 'Search',
+				placeholder: 'FIND YOUR CLUB',
+				list: listOptions,
 				id: '#city_select',
 				cb: team => {
 					this.map.highlightPin(x => x.Team === team)
@@ -63,31 +77,29 @@ class App {
 					return `
 					<div class="tooltip-div">
 						<h3 class="tooltip-title">${d.Team}</h3>
-
 						<div>
-						<div class='FC-rank'> 
-            <div> Rank </div>
-						</div>
+
+						<div class='FC-rank'> <span class='FC-rank'> Rank </span>  <span class='overall-ranking'>${ordinal_suffix_of(d.Rank)} </span> </div>
 
 							<table class="table table-sm">
 								<thead>
 									<tr>
-										<th>Factors</th>
-										<th>Rank</th>
-										<th> <th>
+										<th>Away Game</th>
+										<th class="font-normal text-grey">Total</th>
+										<th class="font-normal text-grey">Rank</th>
 									</tr>
 								</thead>
 								<tbody>
 									${Object.values(config)
 							.sort((a, b) => a.order - b.order)
+							.filter(d => d.tableText !== 'OVERALL').filter(d => d.fieldTeam === 'Travel distance' || d.fieldTeam === 'Fuel cost')
 							.map(conf => {
-								console.log(conf)
 								return `
 												<tr>
 													<td>
 														<div class="d-flex align-items-center">
 															<div class="icon">${conf.icon}</div>
-															<div class="field-Team">${conf.label}</div>
+															<div class="field-Team">${conf.fieldTeam}</div>
 														</div>
 													</td>
 													<td class="col-2">
@@ -99,9 +111,37 @@ class App {
 												</tr>
 											`
 							}).join('')}
-								</tbody>
-							</table>
+
+							<tr>
+								<td colSpan="3">
+                   Home Game
+								</td>
+							</tr>
+
+							${Object.values(config)
+							.sort((a, b) => a.order - b.order)
+							.filter(d => d.tableText !== 'OVERALL').filter(d => d.fieldTeam === 'Parking costs' || d.fieldTeam === 'Parking spaces')
+							.map(conf => {
+								return `
+													<tr>
+														<td>
+															<div class="d-flex align-items-center">
+																<div class="icon">${conf.icon}</div>
+																<div class="field-Team">${conf.fieldTeam}</div>
+															</div>
+														</td>
+														<td class="col-2">
+															${conf.format ? conf.format(d[conf.fieldTeam] || '') : d[conf.fieldTeam] || ''}
+														</td>
+														<td class="col-3">
+															${ordinal_suffix_of(d[conf.rankField])}
+														</td>
+													</tr>
 						
+												`
+							}).join('')}
+								</tbody>
+						</table>
 						</div>
 					</div>`
 				},
@@ -202,35 +242,34 @@ class App {
 
 	fillModal() {
 		const table = d3.select('#table')
-
+		console.log(this.data);
 		const fill = conf => {
 			table.html(`
 				<thead>
 					<tr>
 						<th>Rank</th>
 						<th>Club</th>
-				${conf.fieldTeam ? `<th>${conf.label}</th>` : ''}
+						${conf.fieldTeam ? `<th>${conf.label}</th>` : ''}
 					</tr>
 				</thead>
 				<tbody>
 					${this.data
 					.slice()
+					.filter(d => !isNaN(d[conf.rankField]))
 					.sort((a, b) => {
 						return a[conf.rankField] - b[conf.rankField]
 					})
 					.map(d => {
 						return `
-								<tr>
-									<td>${ordinal_suffix_of(d[conf.rankField])}</td>
-
-				
-
-									<td>${d.Team}</td>
-									${conf.fieldTeam ? `<td>${d[conf.fieldTeam]}</td>` : ''} 
-								</tr>
-							`
+									<tr>
+										<td>${ordinal_suffix_of(d[conf.rankField])}</td>
+										<td>${d.Team}</td>
+										${conf.fieldTeam ? `<td>${d[conf.fieldTeam]}</td>` : ''} 
+									</tr>
+								`
 					})
-					.join('')}
+					.join('')
+				}
 				</tbody>
 			`)
 		}
@@ -238,7 +277,6 @@ class App {
 		fill(config.miles)
 
 		d3.selectAll('.rank-btn').on('click', (e, d) => {
-			console.log(config)
 			const target = e.target.getAttribute('data-target')
 			d3.selectAll('.rank-btn').classed('btn-active', false)
 			d3.select('.table-desc-heading').text(config[target].tableText)

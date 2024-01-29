@@ -17,7 +17,8 @@ const config = {
 		fieldTeam: 'Travel distance',
 		format: v => v + 'mi',
 		label: 'Miles',
-		tableText: 'OVERALL'
+		tableText: 'OVERALL',
+		tableDesc: 'How far fans travel to away games to support their teams'
 	},
 	miles: {
 		order: 1,
@@ -30,7 +31,8 @@ const config = {
 		fieldTeam: 'Travel distance',
 		format: v => v + 'mi',
 		label: 'Miles',
-		tableText: 'TOTAL DISTANCE'
+		tableText: 'TOTAL DISTANCE',
+		tableDesc: 'How far fans travel to away games to support their teams'
 	},
 	fuel_cost: {
 		order: 2,
@@ -40,7 +42,8 @@ const config = {
 		rankField: 'Rank fuel cost',
 		label: 'Fuel cost',
 		fieldTeam: 'Fuel cost',
-		tableText: 'FUEL COST'
+		tableText: 'FUEL COST',
+		tableDesc: 'How much fuel fans spend on travelling to away games to support their teams'
 	},
 
 	parking_cost: {
@@ -52,7 +55,8 @@ const config = {
 		label: 'Parking costs',
 		fieldTeam: 'Parking costs',
 		format: v => v + 'p/h',
-		tableText: 'PARKING COSTS'
+		tableText: 'PARKING COSTS',
+		tableDesc: 'How much the parking within 3km of their stadium costs'
 	},
 
 
@@ -66,7 +70,8 @@ const config = {
 		rankField: 'Rank parking space',
 		label: 'Parking spaces',
 		fieldTeam: 'Parking spaces',
-		tableText: 'PARKING SPACES'
+		tableText: 'PARKING SPACES',
+		tableDesc: 'The number of parking spaces available within 3km of their stadium'
 	},
 }
 

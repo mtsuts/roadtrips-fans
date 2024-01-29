@@ -242,7 +242,6 @@ class App {
 
 	fillModal() {
 		const table = d3.select('#table')
-		console.log(this.data);
 		const fill = conf => {
 			table.html(`
 				<thead>
@@ -280,6 +279,7 @@ class App {
 			const target = e.target.getAttribute('data-target')
 			d3.selectAll('.rank-btn').classed('btn-active', false)
 			d3.select('.table-desc-heading').text(config[target].tableText)
+			d3.select('.table-desc-text').text(config[target].tableDesc)
 			d3.select(e.target).classed('btn-active', true)
 			fill(config[target])
 		})

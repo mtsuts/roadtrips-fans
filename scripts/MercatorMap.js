@@ -101,7 +101,6 @@ class MercatorMap {
 				this.pinsDom
 					.select('.pin-content')
 					.attr('transform', `scale(${1 / scale})`)
-
 				this.currentTransform = e.transform
 
 				tippy.hideAll()
@@ -111,7 +110,11 @@ class MercatorMap {
 			.on('end', () => { })
 
 		this.zoom = zoom
-		this.svg.call(zoom).on('dblclick.zoom', null).on('wheel.zoom', null)
+		if (window.innerWidth > 576) {
+			this.svg.call(zoom).on('dblclick.zoom', null)
+		} else {
+			this.svg.call(zoom).on('dblclick.zoom', null).on('wheel.zoom', null)
+		}
 	}
 
 	drawFeatures() {
